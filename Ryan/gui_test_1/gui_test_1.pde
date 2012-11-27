@@ -23,7 +23,9 @@ int backgroundColor = color(42,44,59);
 void setup() {
   
   PFont pfont = createFont("Arial", 40, true);
-  ControlFont font = new ControlFont(pfont, 40);
+  ControlFont arial40 = new ControlFont(pfont, 40);
+  ControlFont arial10 = new ControlFont(pfont, 10);
+
   
   size(WINDOW_WIDTH, WINDOW_HEIGHT);
   controlP5 = new ControlP5(this);
@@ -61,15 +63,41 @@ void setup() {
   rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT);
   
   
-  // Add the buttons
+  // Add the + button
   controlP5.addButton("+")
            .setValue(0)
-           .setPosition(50, BUTTON_Y_POS)
+           .setPosition((WINDOW_WIDTH/8) - (BUTTON_WIDTH/2), BUTTON_Y_POS)
            .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
            .getCaptionLabel()
-           .setFont(font)
+           .setFont(arial40)
            .align(ControlP5.CENTER, ControlP5.CENTER);
            
+  // Add the — button
+  controlP5.addButton("–")
+           .setValue(0)
+           .setPosition((3*WINDOW_WIDTH/8) - (BUTTON_WIDTH/2), BUTTON_Y_POS)
+           .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
+           .getCaptionLabel()
+           .setFont(arial40)
+           .align(ControlP5.CENTER, ControlP5.CENTER);
+           
+  // Add the ? button
+  controlP5.addButton("?")
+           .setValue(0)
+           .setPosition((5*WINDOW_WIDTH/8) - (BUTTON_WIDTH/2), BUTTON_Y_POS)
+           .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
+           .getCaptionLabel()
+           .setFont(arial40)
+           .align(ControlP5.CENTER, ControlP5.CENTER);
+           
+           
+  // Add the volume knob
+  controlP5.addKnob("Volume")
+           .setValue(100)
+           .setPosition(WINDOW_WIDTH - 80, BUTTON_Y_POS)
+           .setSize(60, 60)
+           .getCaptionLabel()
+           .setFont(arial10);
   //controlP5.addSlider("Pitch",0,100,50,50,50,10,100);
   //controlP5.addSlider("LFO",0,100,50,150,50,10,100);
   //controlP5.addSlider("Duty Cycle",0,100,50,250,50,10,100);
