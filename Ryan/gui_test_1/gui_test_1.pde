@@ -11,8 +11,8 @@ final int V_GUIDE_DIST    = 50;
 
 // Controls
 final int CONTROLS_HEIGHT = 100;
-final int BUTTON_WIDTH    = 250;
-final int BUTTON_HEIGHT   = 80;
+final int BUTTON_WIDTH    = 150;
+final int BUTTON_HEIGHT   = 70;
 final int BUTTON_Y_POS    = (CONTROLS_HEIGHT - BUTTON_HEIGHT) / 2;
 
 // final color BUTTON_COLOR    = color(245, 178, 51);
@@ -22,8 +22,8 @@ int backgroundColor = color(42,44,59);
 
 void setup() {
   
-  PFont pfont = createFont("Arial", 40, true);
-  ControlFont arial40 = new ControlFont(pfont, 40);
+  PFont pfont = createFont("Arial", 60, true);
+  ControlFont arial60 = new ControlFont(pfont, 60);
   ControlFont arial10 = new ControlFont(pfont, 10);
 
   
@@ -64,30 +64,23 @@ void setup() {
   
   
   // Add the + button
-  controlP5.addButton("+")
+  controlP5.addButton("plus")
            .setValue(0)
            .setPosition((WINDOW_WIDTH/8) - (BUTTON_WIDTH/2), BUTTON_Y_POS)
            .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
+           .setCaptionLabel("+")
            .getCaptionLabel()
-           .setFont(arial40)
+           .setFont(arial60)
            .align(ControlP5.CENTER, ControlP5.CENTER);
            
   // Add the — button
-  controlP5.addButton("–")
+  controlP5.addButton("minus")
            .setValue(0)
            .setPosition((3*WINDOW_WIDTH/8) - (BUTTON_WIDTH/2), BUTTON_Y_POS)
            .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
+           .setCaptionLabel("–")
            .getCaptionLabel()
-           .setFont(arial40)
-           .align(ControlP5.CENTER, ControlP5.CENTER);
-           
-  // Add the ? button
-  controlP5.addButton("?")
-           .setValue(0)
-           .setPosition((5*WINDOW_WIDTH/8) - (BUTTON_WIDTH/2), BUTTON_Y_POS)
-           .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
-           .getCaptionLabel()
-           .setFont(arial40)
+           .setFont(arial60)
            .align(ControlP5.CENTER, ControlP5.CENTER);
            
            
@@ -106,4 +99,12 @@ void setup() {
 
 void draw() {
 
+}
+
+// called when plus button is pressed
+public void plus(int theValue) {
+}
+
+// called when minus button is pressed
+public void minus(int theValue) {
 }
