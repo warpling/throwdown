@@ -46,7 +46,6 @@ void setup() {
   
   // Draw the vertical guides
   stroke(52, 54, 60);
-  
   for(int ctr = 0; ctr < WINDOW_WIDTH; ctr += V_GUIDE_DIST) {
     line(ctr, 0, ctr, WINDOW_HEIGHT);
   }
@@ -55,9 +54,9 @@ void setup() {
   // Draw the controls bar
   noStroke();
   // This makes the shaddow under the interface
-  fill(50);
-  rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT + 1);
-  filter( BLUR, 4 );
+//  fill(50);
+//  rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT + 1);
+//  filter( BLUR, 4 );
   // This makes the actual grey bar
   fill(223);
   rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT);
