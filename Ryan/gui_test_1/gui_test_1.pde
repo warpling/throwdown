@@ -1,20 +1,81 @@
 import controlP5.*;
 
-final int WINDOW_WIDTH  = 1440;
-final int WINDOW_HEIGHT = 900;
+// Window
+final int WINDOW_WIDTH    = 1440;
+final int WINDOW_HEIGHT   = 900;
+
+// Layout
+final int NUMBER_SAMPLES  = 10;
+final int SAMPLE_HEIGHT   = 80;
+final int V_GUIDE_DIST    = 50;
+
+// Controls
+final int CONTROLS_HEIGHT = 100;
+final int BUTTON_WIDTH    = 250;
+final int BUTTON_HEIGHT   = 80;
+final int BUTTON_Y_POS    = (CONTROLS_HEIGHT - BUTTON_HEIGHT) / 2;
+
+// final color BUTTON_COLOR    = color(245, 178, 51);
 
 ControlP5 controlP5;
-int myColorBackground = color(0,0,0);
+int backgroundColor = color(42,44,59);
 
 void setup() {
-size(WINDOW_WIDTH, WINDOW_HEIGHT);
-controlP5 = new ControlP5(this);
-controlP5.addSlider("Pitch",0,100,50,50,50,10,100);
-controlP5.addSlider("LFO",0,100,50,150,50,10,100);
-controlP5.addSlider("Duty Cycle",0,100,50,250,50,10,100);
-controlP5.addKnob("Volume",0,11,5,330,70,40);
+  
+  PFont pfont = createFont("Arial", 40, true);
+  ControlFont font = new ControlFont(pfont, 40);
+  
+  size(WINDOW_WIDTH, WINDOW_HEIGHT);
+  controlP5 = new ControlP5(this);
+  
+  background(backgroundColor);
+
+  // Draw the horizonal guides
+  noStroke();
+  fill(46, 48, 64);
+  
+  int roomLeftForSamples = WINDOW_HEIGHT - CONTROLS_HEIGHT;
+  
+  for(int ctr = 0; ctr < roomLeftForSamples / SAMPLE_HEIGHT; ctr++) {
+    int yPos = WINDOW_HEIGHT - (2 * ctr * SAMPLE_HEIGHT);
+    rect(0, yPos, WINDOW_WIDTH, SAMPLE_HEIGHT);
+  }
+  
+  
+  // Draw the vertical guides
+  stroke(52, 54, 60);
+  
+  for(int ctr = 0; ctr < WINDOW_WIDTH; ctr += V_GUIDE_DIST) {
+    line(ctr, 0, ctr, WINDOW_HEIGHT);
+  }
+  
+  
+  // Draw the controls bar
+  noStroke();
+  // This makes the shaddow under the interface
+  fill(50);
+  rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT + 1);
+  filter( BLUR, 4 );
+  // This makes the actual grey bar
+  fill(223);
+  rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT);
+  
+  
+  // Add the buttons
+  controlP5.addButton("+")
+           .setValue(0)
+           .setPosition(50, BUTTON_Y_POS)
+           .setSize(BUTTON_WIDTH, BUTTON_HEIGHT)
+           .getCaptionLabel()
+           .setFont(font)
+           .align(ControlP5.CENTER, ControlP5.CENTER);
+           
+  //controlP5.addSlider("Pitch",0,100,50,50,50,10,100);
+  //controlP5.addSlider("LFO",0,100,50,150,50,10,100);
+  //controlP5.addSlider("Duty Cycle",0,100,50,250,50,10,100);
+  //controlP5.addKnob("Volume",0,11,5,330,70,40);
 }
 
 void draw() {
-background(myColorBackground);
+
 }
