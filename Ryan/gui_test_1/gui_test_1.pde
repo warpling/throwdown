@@ -5,7 +5,7 @@ final int WINDOW_WIDTH    = 1440;
 final int WINDOW_HEIGHT   = 900;
 
 // Layout
-final int NUMBER_SAMPLES  = 10;
+final int NUMBER_SAMPLES  = 8;
 final int SAMPLE_HEIGHT   = 80;
 final int V_GUIDE_DIST    = 50;
 
