@@ -56,8 +56,8 @@ void keyPressed()
 {
   if(key == ENTER)
   {
-    beatList.get(0).trigger();
-    beatList.get(1).trigger();
+//    beatList.get(0).trigger();
+//    beatList.get(1).trigger();
     
     //Check if there is a recorded sample
     if(beatList.size() >2)
