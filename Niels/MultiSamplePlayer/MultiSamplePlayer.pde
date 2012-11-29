@@ -6,48 +6,51 @@ import ddf.minim.ugens.*;
 import ddf.minim.effects.*;
 
 Minim minim;
-AudioSample s1;
-AudioSample s2;
-AudioSample s3;
+AudioSample sTemp;
 
 //Make an arraylist containing audio samples
 ArrayList<AudioSample> beatList;
 
+int currentRecordingNum;
+String currentRecording;
+boolean isRecording = false;
 
 //Record audio
-AudioRecorder recorder;
 AudioInput in;
+AudioRecorder recorder;
 AudioRecording recording;
 
 
 void setup()
 {
+ size(512, 200, P3D);
  minim = new Minim(this);
-
-
- //Set recording
+ //minim.debugOn();  //Debug minim
  in = minim.getLineIn();
- recorder = minim.createRecorder(in, "s3.wav", true);
  
- //Set stock samples and add to beatList
- s2 = minim.loadSample("snd2.wav", 1024);
- s1 = minim.loadSample("snd1.wav", 1024);
  beatList = new ArrayList<AudioSample>();
- beatList.add(s1);
- beatList.add(s2);
 }
 
 
 void draw()
 {
-  //Do nothing
+  background(0);
+  stroke(255);
+  // draw the waveform
+  if(isRecording)
+  {
+    stroke(0,255,0);
+  }
+  for(int i = 0; i < in.bufferSize() - 1; i++)
+  {
+    line(i, 50 + in.left.get(i)*50, i+1, 50 + in.left.get(i+1)*50);
+  }
 }
 
 void stop()
 {
- s1.close();
- s2.close();
- s3.close(); 
+ //Todo: Get rid of samples from session.
+ sTemp.close(); 
  minim.stop();
  super.stop();
 }
@@ -55,40 +58,47 @@ void stop()
 void keyPressed()
 {
   if(key == ENTER)
-  {
-    beatList.get(0).trigger();
-    beatList.get(1).trigger();
-    
-    //Check if there is a recorded sample
-    if(beatList.size() >2)
-     {
-    beatList.get(2).trigger();
-     } 
-  }
-  if(key == 'r')
-  {  
-   if(recorder.isRecording())
+  {   
+    for(int i=0; i < beatList.size(); i++)
     {
-       recorder.endRecord();
-       //Now save recorded file into Audiosample and load        
-       recorder.save();
-       System.out.println("Done saving.");
-       s3 = minim.loadSample("s3.wav", 1024);
-       beatList.add(s3);
-       
-       System.out.println("Length of newly recorded audio is " + beatList.get(2).length());
-       
-    } else
+       beatList.get(i).trigger();
+    }
+    if(beatList.size()<1)
     {
-       recorder.beginRecord();
-      System.out.println("Start recording"); 
+       println("Nothing to play here..."); 
     }
   }
-  
-  //Debug play newly recorded sample
-  if(key == 'p')
+  if(key == 'r')
   {
-    beatList.get(2).trigger();
+    //start new recording
+    if(isRecording == false)
+    {
+      //Setup linein
+      println("Starting new record...");
+      
+      
+      //Get filenum and name
+      currentRecordingNum = beatList.size()+ 1;
+      currentRecording = "s"+ currentRecordingNum +".wav";
+      println("Number of record: " + currentRecordingNum + " filename: " +currentRecording);
+    
+      //setup recorder
+      recorder = minim.createRecorder(in, currentRecording, true);
+      recorder.beginRecord();
+      System.out.println("Recording...");
+      isRecording = true; 
+    }else
+    {
+      //Now end and save recorded file into Audiosample and load 
+       recorder.endRecord();
+       recorder.save();
+       
+       System.out.println("Done saving.");
+       sTemp = minim.loadSample(currentRecording, 1024);
+       beatList.add(sTemp);
+       
+       System.out.println("Length of newly recorded audio is " + beatList.get(currentRecordingNum-1).length());
+       isRecording = false; 
+    }
   }
-  System.out.println(key);
 }
