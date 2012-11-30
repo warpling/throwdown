@@ -4,10 +4,14 @@ import controlP5.*;
 final int WINDOW_WIDTH    = 1440;
 final int WINDOW_HEIGHT   = 900;
 
+// Beat Constants
+final int NUMBER_OF_SAMPLES  = 8;
+final int LENGTH_OF_LOOP     = 8; // in seconds
+final int NUMBER_OF_MARKERS  = 16; // number of vertical line markers
+final int FPS                = 60; // Hopefully we can use a timing object instead
+
 // Layout
-final int NUMBER_SAMPLES  = 8;
 final int SAMPLE_HEIGHT   = 80;
-final int V_GUIDE_DIST    = 50;
 
 // Controls
 final int CONTROLS_HEIGHT = 100;
@@ -37,16 +41,20 @@ void setup() {
   fill(46, 48, 64);
   
   int roomLeftForSamples = WINDOW_HEIGHT - CONTROLS_HEIGHT;
+  int sampleHeight = roomLeftForSamples / NUMBER_OF_SAMPLES;
   
-  for(int ctr = 0; ctr < roomLeftForSamples / SAMPLE_HEIGHT; ctr++) {
-    int yPos = WINDOW_HEIGHT - (2 * ctr * SAMPLE_HEIGHT);
-    rect(0, yPos, WINDOW_WIDTH, SAMPLE_HEIGHT);
+  for(int ctr = 0; ctr < NUMBER_OF_SAMPLES; ctr++) {
+    int yPos = WINDOW_HEIGHT - (2 * ctr * sampleHeight);
+    rect(0, yPos, WINDOW_WIDTH, sampleHeight);
   }
   
   
   // Draw the vertical guides
   stroke(52, 54, 60);
-  for(int ctr = 0; ctr < WINDOW_WIDTH; ctr += V_GUIDE_DIST) {
+  
+  int distBetweenMarkers = WINDOW_WIDTH / NUMBER_OF_MARKERS;
+  
+  for(int ctr = 0; ctr < WINDOW_WIDTH; ctr += distBetweenMarkers) {
     line(ctr, 0, ctr, WINDOW_HEIGHT);
   }
   
@@ -54,9 +62,9 @@ void setup() {
   // Draw the controls bar
   noStroke();
   // This makes the shaddow under the interface
-//  fill(50);
-//  rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT + 1);
-//  filter( BLUR, 4 );
+  //  fill(50);
+  //  rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT + 1);
+  //  filter( BLUR, 4 );
   // This makes the actual grey bar
   fill(223);
   rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT);
