@@ -8,7 +8,7 @@ import ddf.minim.effects.*;
 Minim minim;
 AudioSample sTemp;
 
-//Make an arraylist containing audio samples
+//Make an arraylist that will contain new audio samples
 ArrayList<AudioSample> beatList;
 
 int currentRecordingNum;

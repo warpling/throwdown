@@ -1,4 +1,4 @@
-import processing.opengl.*; //just for testing
+//import processing.opengl.*; //just for testing
 import processing.pdf.*;
 import ddf.minim.*;
 
@@ -44,6 +44,8 @@ void draw()
     
     
     //line(x1 + partNum*25, 50, x2+partNum*25, 50);
+    
+    //Note: The times 20 for x is to space the writing out. This should be done in a better way.
     line(x1+partNum*20, height/2 - groove.left.get(i)*50, x2+partNum*20, height/2 - groove.left.get(i+1)*50);
     
     
