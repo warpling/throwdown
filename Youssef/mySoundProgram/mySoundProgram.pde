@@ -27,7 +27,10 @@ char[] numArray, alphArray;
 // Tempo variables declaration
 AudioSample Tick, Tock;
 boolean tempo;
-int bpm=120, beatPosition=0;
+int bpm=127, beatPosition=0;
+
+// Number of tracks
+int numTracks = 8;
 
 // Timer declaration
 TimeThread timer;
@@ -35,14 +38,14 @@ TimeThread timer;
 void setup()
 {
   // Window and font Initialization
-  size(512, 400, P3D);
+  size(512, 100 * numTracks, P3D);
   textFont(createFont("Arial", 16));
   
   // Arrays initialization
-  SamplesArray = new AudioSample[4];
-  PlayArray    = new boolean[4];
+  SamplesArray = new AudioSample[numTracks];
+  PlayArray    = new boolean[numTracks];
   // -- Set all the playing booleans to false
-  for (int i=0; i < PlayArray.length; i++)      PlayArray[i] = false;
+  for (int i=0; i < numTracks; i++)      PlayArray[i] = false;
   
   // Minim and Timer initialization
   minim = new Minim(this);
@@ -54,9 +57,9 @@ void setup()
   
   // Setup recorders
   Microphone = minim.getLineIn();
-  Recorders = new AudioRecorder[4];
+  Recorders = new AudioRecorder[numTracks];
   
-  for (int i=0; i < PlayArray.length; i++) {
+  for (int i=0; i < numTracks; i++) {
       Recorders[i] = minim.createRecorder(Microphone, "data/SoundFiles/Sample" + numArray[i] + ".wav", false);
     }
     
@@ -64,11 +67,15 @@ void setup()
   Tick = minim.loadSample( "SoundFiles/tick.mp3", 1024);
   Tock = minim.loadSample( "SoundFiles/tock.mp3", 1024);
   
-  //Load default samples
-  SamplesArray[0] = minim.loadSample( "SoundFiles/TechHouse 1 - Lead.mp3", 1024);
-  SamplesArray[1] = minim.loadSample( "SoundFiles/TechHouse 1 - Drums.mp3", 1024);
-  SamplesArray[2] = minim.loadSample( "SoundFiles/TechHouse 1 - Bass.mp3", 1024);
-  SamplesArray[3] = minim.loadSample( "SoundFiles/TechHouse 1 - Perc.mp3", 1024);
+  //Load default samples - Needed to have waveforms at startup
+  if (numTracks -1 >= 0) SamplesArray[0] = minim.loadSample( "SoundFiles/TechHouse 1 - Lead.mp3", 1024);
+  if (numTracks -1 >= 1) SamplesArray[1] = minim.loadSample( "SoundFiles/TechHouse 1 - Drums.mp3", 1024);
+  if (numTracks -1 >= 2) SamplesArray[2] = minim.loadSample( "SoundFiles/TechHouse 1 - Bass.mp3", 1024);
+  if (numTracks -1 >= 3) SamplesArray[3] = minim.loadSample( "SoundFiles/TechHouse 1 - Perc.mp3", 1024);
+  if (numTracks -1 >= 4) SamplesArray[4] = minim.loadSample( "SoundFiles/TechHouse 2 - Lead.mp3", 1024);
+  if (numTracks -1 >= 5) SamplesArray[5] = minim.loadSample( "SoundFiles/TechHouse 2 - Drums.mp3", 1024);
+  if (numTracks -1 >= 6) SamplesArray[6] = minim.loadSample( "SoundFiles/TechHouse 2 - Bass.mp3", 1024);
+  if (numTracks -1 >= 7) SamplesArray[7] = minim.loadSample( "SoundFiles/TechHouse 2 - FX.mp3", 1024);
 }
 
 void draw()
@@ -78,16 +85,16 @@ void draw()
   
   // Writes beatPosition
   //fill(255, 102, 153);  
-  text(beatPosition, 400, 50);
+  text(beatPosition, 490, 25);
   
   // Writes recorders state
-  for (int i=0; i < PlayArray.length; i++) {   
-      if ( Recorders[i].isRecording() )       text("REC", 5, 45 + 100*i);
-      else                                    text("...", 5, 45 + 100*i);
+  for (int i=0; i < numTracks; i++) {   
+      if ( Recorders[i].isRecording() )       text("REC", 5, 47 + 100*i);
+      else                                    text("...", 5, 47 + 100*i);
   }
 
   //Generate waveforms
-  for (int i=0; i < SamplesArray.length; i++)      DrawWaveForm(SamplesArray[i],50+100*i);
+  for (int i=0; i < numTracks; i++)      DrawWaveForm(SamplesArray[i],50+100*i);
 }
 
 
@@ -100,7 +107,7 @@ void play() {
   }
   
   // Samples stack
-  for (int i=0; i < PlayArray.length; i++)
+  for (int i=0; i < numTracks; i++)
     {
       if(PlayArray[i]) {
         SamplesArray[i].stop();
