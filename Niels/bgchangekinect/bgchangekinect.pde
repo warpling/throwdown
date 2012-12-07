@@ -13,7 +13,7 @@ float lHandPosY;
 OscP5 oscP5;
 
 DrawSkeleton dskel;
-color bgColor = color(255, 0, 0);
+color bgColor = color(0,0,255);
 
 void setup() 
 {
@@ -23,16 +23,26 @@ void setup()
 }
 void draw(){  
   //If you hand is above your head change BG color, otherwise change it back to how it was.
-  if(headPosY > lHandPosY)
+  println("Is there a user?" + dskel.isUser());
+  if(dskel.isUser())
   {
-     bgColor = color(255, 0, 0);
-     background(bgColor);
+    if(headPosY > lHandPosY)
+    {
+       bgColor = color(255, 0, 0);
+       background(bgColor);
+    }else
+    {
+      bgColor = color(0,0,255);
+      background(bgColor);  
+    }
+    dskel.doDraw(bgColor); //Pass in current bg color for redraw
   }else
   {
-    bgColor = color(0,0,255);
-    background(bgColor);  
+    background(bgColor);
+    textSize(34);
+    text("Please stand in front of the Camera", 10, 30); 
+    fill(205, 202, 103);
   }
-  dskel.doDraw(bgColor); //Pass in current bg color for redraw
 }
 
 void oscEvent(OscMessage msg) 

@@ -1,6 +1,8 @@
 float noiseIter = 0.0;
 int ballSize = 10;
 
+boolean isUser = false;
+
 Hashtable<Integer, Skeleton> skels = new Hashtable<Integer, Skeleton>();
 
 class DrawSkeleton
@@ -147,12 +149,14 @@ class DrawSkeleton
     Integer id = msg.get(0).intValue();
     Skeleton s = new Skeleton(id);
     skels.put(id, s);
+    isUser = true;
   }
   else if(msg.checkAddrPattern("/lost_user") && msg.checkTypetag("i")) {
     //Lost user/skeleton
     Integer id = msg.get(0).intValue();
     println("Lost user " + id);
     skels.remove(id);
+    isUser = false;
   } 
  } 
   
@@ -171,6 +175,11 @@ class DrawSkeleton
             (joint1[1] + (i*step_y))*height,
             ballSize, ballSize);
   }
+}
+
+boolean isUser()
+{
+  return isUser; 
 }
 
 void doDraw(color bg)
