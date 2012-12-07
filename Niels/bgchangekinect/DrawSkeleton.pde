@@ -10,7 +10,8 @@ class DrawSkeleton
   
   public DrawSkeleton()
   {
-    println("BOO! I am a skeleton");
+    //Do nothing
+    //println("BOO! I am a skeleton");
   }
   
   public void passOSC(OscMessage msg)
