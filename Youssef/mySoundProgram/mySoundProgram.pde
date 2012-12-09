@@ -5,122 +5,116 @@
   * - Plays them back
   * - Plays a tempo
   */
-  
+ 
+// Minim declaration 
 import ddf.minim.*;
-
 Minim minim;
-AudioSample Lead, Drums, Bass, Perc;
-boolean playLead, playDrums, playBass, playPerc;
 
+// Audiorecorders declaration
+AudioInput Microphone;
+AudioRecorder[] Recorders;
+
+// Audiosamples Arrays declaration
+// -- One array for the samples
+// -- One array for the 'play or not' boolean
+// -- One array for the keys to press
+AudioSample[] SamplesArray;
+boolean[] PlayArray;
+
+// Arrays containing the char sequences "0,1,2.." and "a,b,c.." for control purposes
+char[] numArray, alphArray;
+
+// Tempo variables declaration
 AudioSample Tick, Tock;
-
 boolean tempo;
+int bpm=127, beatPosition=0;
 
-PFont font;
+// Number of tracks
+int numTracks = 8;
 
-int time;
-
+// Timer declaration
+TimeThread timer;
 
 void setup()
 {
-  //Initialization
-  size(512, 400, P3D);
-  frameRate(60);
+  // Window and font Initialization
+  size(512, 100 * numTracks, P3D);
+  textFont(createFont("Arial", 16));
   
-  font = loadFont("CenturySchL-Bold-48.vlw");
-  textFont(font);
+  // Arrays initialization
+  SamplesArray = new AudioSample[numTracks];
+  PlayArray    = new boolean[numTracks];
+  // -- Set all the playing booleans to false
+  for (int i=0; i < numTracks; i++)      PlayArray[i] = false;
   
+  // Minim and Timer initialization
   minim = new Minim(this);
+  timer = new TimeThread(bpm);
+  timer.start();
   
+  //Initializes the arrays with the "0,1,2,3..." and "a,z,e,r..." sequences
+  initCharArrays();
+  
+  // Setup recorders
+  Microphone = minim.getLineIn();
+  Recorders = new AudioRecorder[numTracks];
+  
+  for (int i=0; i < numTracks; i++) {
+      Recorders[i] = minim.createRecorder(Microphone, "data/SoundFiles/Sample" + numArray[i] + ".wav", false);
+    }
+    
   //Load metronome samples
   Tick = minim.loadSample( "SoundFiles/tick.mp3", 1024);
   Tock = minim.loadSample( "SoundFiles/tock.mp3", 1024);
   
-  //Load other samples  
-  Lead = minim.loadSample( "SoundFiles/TechHouse 1 - Lead.mp3", 1024);
-  Drums = minim.loadSample( "SoundFiles/TechHouse 1 - Drums.mp3", 1024);
-  Bass = minim.loadSample( "SoundFiles/TechHouse 1 - Bass.mp3", 1024);
-  Perc = minim.loadSample( "SoundFiles/TechHouse 1 - Perc.mp3", 1024);
+  //Load default samples - Needed to have waveforms at startup
+  if (numTracks -1 >= 0) SamplesArray[0] = minim.loadSample( "SoundFiles/TechHouse 1 - Lead.mp3", 1024);
+  if (numTracks -1 >= 1) SamplesArray[1] = minim.loadSample( "SoundFiles/TechHouse 1 - Drums.mp3", 1024);
+  if (numTracks -1 >= 2) SamplesArray[2] = minim.loadSample( "SoundFiles/TechHouse 1 - Bass.mp3", 1024);
+  if (numTracks -1 >= 3) SamplesArray[3] = minim.loadSample( "SoundFiles/TechHouse 1 - Perc.mp3", 1024);
+  if (numTracks -1 >= 4) SamplesArray[4] = minim.loadSample( "SoundFiles/TechHouse 2 - Lead.mp3", 1024);
+  if (numTracks -1 >= 5) SamplesArray[5] = minim.loadSample( "SoundFiles/TechHouse 2 - Drums.mp3", 1024);
+  if (numTracks -1 >= 6) SamplesArray[6] = minim.loadSample( "SoundFiles/TechHouse 2 - Bass.mp3", 1024);
+  if (numTracks -1 >= 7) SamplesArray[7] = minim.loadSample( "SoundFiles/TechHouse 2 - FX.mp3", 1024);
 }
 
 void draw()
 {
   background(0);
   stroke(255);
-
-  fill(0, 102, 153);  
-  text(time, 400, 50);
-//  fill(50, 152, 203);  
-//  text(mouseY, 400, 100);
-
-  // Time manager
-  time++;
-  time = time % 480;
   
+  // Writes beatPosition
+  //fill(255, 102, 153);  
+  text(beatPosition, 490, 25);
+  
+  // Writes recorders state
+  for (int i=0; i < numTracks; i++) {   
+      if ( Recorders[i].isRecording() )       text("REC", 5, 47 + 100*i);
+      else                                    text("...", 5, 47 + 100*i);
+  }
+
+  //Generate waveforms
+  for (int i=0; i < numTracks; i++)      DrawWaveForm(SamplesArray[i],50+100*i);
+}
+
+
+
+void play() {
   // Tempo manager
-  if(tempo)
-  {
-  if ( (time % 120) == 0 ) Tick.trigger();
-  else if ( (time % 30) == 0 ) Tock.trigger();
+  if(tempo){
+    if ( (beatPosition % 4) == 1 ) Tick.trigger();
+    else Tock.trigger();
   }
   
   // Samples stack
-  if ( (time % 30) == 0 )
-  {
-    if (playLead) {
-          Lead.stop();
-          Lead.trigger();
-          playLead = false;
-    } 
-    
-    if (playDrums) {
-          Drums.stop();
-          Drums.trigger();
-          playDrums = false;
+  for (int i=0; i < numTracks; i++)
+    {
+      if(PlayArray[i]) {
+        SamplesArray[i].stop();
+        SamplesArray[i].trigger();
+        PlayArray[i] = false;
+      }
     }
     
-    if (playBass) {
-          Bass.stop();
-          Bass.trigger();
-          playBass = false;
-    }
-
-    if (playPerc) {
-          Perc.stop();
-          Perc.trigger();
-          playPerc = false;
-    }
-  }
-  
-  
-  
-  //Generate waveforms
-  for (int i = 0; i < Drums.bufferSize() - 1;  i++)
-  {
-    line(i, 50 - Drums.left.get(i)*50, i+1, 50 - Drums.left.get(i+1)*10);
-  }
-  
-    for (int i = 0; i < Lead.bufferSize() - 1;  i++)
-  {
-    line(i, 150 - Lead.left.get(i)*50, i+1, 150 - Lead.left.get(i+1)*10);
-  }
-  
-      for (int i = 0; i < Bass.bufferSize() - 1;  i++)
-  {
-    line(i, 250 - Bass.left.get(i)*50, i+1, 250 - Bass.left.get(i+1)*10);
-  }
-  
-      for (int i = 0; i < Perc.bufferSize() - 1;  i++)
-  {
-    line(i, 350 - Perc.left.get(i)*50, i+1, 350 - Perc.left.get(i+1)*10);
-  }
-}
-
-void keyPressed() 
-{
-  if ( key == 'd' ) playDrums = true;
-  if ( key == 'l' ) playLead = true;
-  if ( key == 'b' ) playBass = true;
-  if ( key == 'p' ) playPerc = true;
-  if ( key == 't' ) tempo = !tempo;
+  beatPosition++;
 }
