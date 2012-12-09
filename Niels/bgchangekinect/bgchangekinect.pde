@@ -2,6 +2,11 @@
 Based on examples from: 
 - http://www.miguelespada.es/?p=579
 - http://github.com/Sensebloom/OSCeleton-examples/tree/master/processing/Stickmanetic
+
+
+Possibly a different way to draw skeleton:
+http://learning.codasign.com/index.php?title=Trigger_Audio_When_a_Skeleton_is_Tracked
+
 */
 
 import oscP5.*;
