@@ -19,8 +19,6 @@ final int BUTTON_Y_POS    = (CONTROLS_HEIGHT - BUTTON_HEIGHT) / 2;
 // Layout
 final int SAMPLE_HEIGHT   = (WINDOW_HEIGHT - CONTROLS_HEIGHT) / NUMBER_OF_SAMPLES;
 
-// final color BUTTON_COLOR    = color(245, 178, 51);
-
 ControlP5 controlP5;
 int backgroundColor = color(42,44,59);
 int strokeColor = color(12,12,158);
@@ -74,28 +72,24 @@ void drawBackground(){
   noStroke();
   fill(46, 48, 64);
   
-//  int roomLeftForSamples = WINDOW_HEIGHT - CONTROLS_HEIGHT;
-//  int sampleHeight = roomLeftForSamples / NUMBER_OF_SAMPLES;
-  
   for(int ctr = 0; ctr < NUMBER_OF_SAMPLES; ctr++) {
     int yPos = WINDOW_HEIGHT - (2 * ctr * SAMPLE_HEIGHT);
     rect(0, yPos, WINDOW_WIDTH, SAMPLE_HEIGHT);
   }
   
-  
   // Draw the vertical guides
   stroke(52, 54, 60);
+  strokeWeight(1);
   
   int distBetweenMarkers = WINDOW_WIDTH / NUMBER_OF_MARKERS;
   
   for(int ctr = 0; ctr < WINDOW_WIDTH; ctr += distBetweenMarkers) {
     line(ctr, CONTROLS_HEIGHT, ctr, WINDOW_HEIGHT);
   }
-  
-    // Draw the controls bar
+    
+  // Draw the controls bar
   noStroke();
-  // This makes the shaddow under the interface
-  //  fill(50);
+  // This makes the shaddow under the i fill(50);
   //  rect(0, 0, WINDOW_WIDTH, CONTROLS_HEIGHT + 1);
   //  filter( BLUR, 4 );
   // This makes the actual grey bar
