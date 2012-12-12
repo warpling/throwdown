@@ -1,3 +1,4 @@
+
 // Draws dynamic waveform for a sample at a given vertical position.
 void DrawWaveForm(AudioSample sample,int position){
   int barLength = sample.length()/LENGTH_OF_LOOP - 20;
@@ -13,10 +14,10 @@ void DrawWaveForm(AudioSample sample,int position){
 void DrawWaveFrame(AudioSample sample,int position){
 
   int margin = WINDOW_WIDTH / NUMBER_OF_MARKERS;
-  int barLength = sample.length()/LENGTH_OF_LOOP;
+  int barLength = sample.length() / LENGTH_OF_LOOP;
   
   strokeWeight(5);
-  rect( margin , position - 20,barLength, 40, 20);
+  rect(margin , position - 40, barLength, 80, 40);
   strokeWeight(1);
 }
 
