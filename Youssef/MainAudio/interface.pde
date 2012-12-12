@@ -10,14 +10,14 @@ final int LENGTH_OF_LOOP     = 8; // in seconds
 final int NUMBER_OF_MARKERS  = 16; // number of vertical line markers
 final int FPS                = 60; // Hopefully we can use a timing object instead
 
-// Layout
-final int SAMPLE_HEIGHT   = 80;
-
 // Controls
 final int CONTROLS_HEIGHT = 100;
 final int BUTTON_WIDTH    = 150;
 final int BUTTON_HEIGHT   = 70;
 final int BUTTON_Y_POS    = (CONTROLS_HEIGHT - BUTTON_HEIGHT) / 2;
+
+// Layout
+final int SAMPLE_HEIGHT   = (WINDOW_HEIGHT - CONTROLS_HEIGHT) / NUMBER_OF_SAMPLES;
 
 // final color BUTTON_COLOR    = color(245, 178, 51);
 
@@ -27,7 +27,7 @@ int strokeColor = color(12,12,158);
 // -------------------------------------------------------- //
 
 void setupInterface() {
-      
+        
   size(WINDOW_WIDTH, WINDOW_HEIGHT, P3D);
 
   controlP5 = new ControlP5(this);
@@ -64,10 +64,6 @@ void setupInterface() {
            .setSize(60, 60)
            .getCaptionLabel()
            .setFont(arial10);
-  //controlP5.addSlider("Pitch",0,100,50,50,50,10,100);
-  //controlP5.addSlider("LFO",0,100,50,150,50,10,100);
-  //controlP5.addSlider("Duty Cycle",0,100,50,250,50,10,100);
-  //controlP5.addKnob("Volume",0,11,5,330,70,40);
 }
 
 void drawBackground(){
@@ -78,12 +74,12 @@ void drawBackground(){
   noStroke();
   fill(46, 48, 64);
   
-  int roomLeftForSamples = WINDOW_HEIGHT - CONTROLS_HEIGHT;
-  int sampleHeight = roomLeftForSamples / NUMBER_OF_SAMPLES;
+//  int roomLeftForSamples = WINDOW_HEIGHT - CONTROLS_HEIGHT;
+//  int sampleHeight = roomLeftForSamples / NUMBER_OF_SAMPLES;
   
   for(int ctr = 0; ctr < NUMBER_OF_SAMPLES; ctr++) {
-    int yPos = WINDOW_HEIGHT - (2 * ctr * sampleHeight);
-    rect(0, yPos, WINDOW_WIDTH, sampleHeight);
+    int yPos = WINDOW_HEIGHT - (2 * ctr * SAMPLE_HEIGHT);
+    rect(0, yPos, WINDOW_WIDTH, SAMPLE_HEIGHT);
   }
   
   

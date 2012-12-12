@@ -54,8 +54,7 @@ void setup()
   
   setupInterface();
 
-  
-  
+  print(SAMPLE_HEIGHT);
   // Window and font Initialization
   //size(512, 100 * numTracks, P3D);
   //textFont(createFont("Arial", 16));
@@ -107,9 +106,9 @@ void draw()
   text((beatPosition / 4),     450, 25);
   
   // Writes recorders state
-  for (int i=0; i < numTracks; i++) {   
-      if ( Recorders[i].isRecording() )       text("REC", 25, 147 + 100*i);
-      else                                    text("...", 25, 147 + 100*i);
+  for (int i=0; i < numTracks; i++) {
+      if ( Recorders[i].isRecording() )       text("REC", 25, (SAMPLE_HEIGHT / 2) + 100*i);
+      else                                    text("...", 25, (SAMPLE_HEIGHT / 2) + 100*i);
   }
 
   //Generate waveforms
@@ -117,8 +116,8 @@ void draw()
     // The recording track is of a different color
     if(i == recordingTrack)  stroke(131, 18, 18); else stroke(strokeColor);
 
-    DrawWaveFrame(SamplesArray[i],150+100*i);
-    DrawWaveForm(SamplesArray[i],150+100*i);
+    DrawWaveFrame(SamplesArray[i], CONTROLS_HEIGHT + (SAMPLE_HEIGHT/2) + (SAMPLE_HEIGHT * i));
+    DrawWaveForm(SamplesArray[i], CONTROLS_HEIGHT + (SAMPLE_HEIGHT/2) + (SAMPLE_HEIGHT * i));
     
   }
 }
