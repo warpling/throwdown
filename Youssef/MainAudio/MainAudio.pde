@@ -76,6 +76,10 @@ void setup()
   // *****************************************************************************
   // Should this only start if autoplayOn is set to true?? I can't seem to call it
   // from the "draw" loop without a threading error
+  //
+  // The timer is in a separate thread and always running. autoplayOn tells the 
+  // program wether or not to loop the samples ( = play them again after 
+  // a number (autoplayBeatNum) of beats. 
   // *****************************************************************************
   timer.start();
   
@@ -131,6 +135,22 @@ void draw()
     DrawWaveForm(SamplesArray[i], CONTROLS_HEIGHT + (SAMPLE_HEIGHT/2) + (SAMPLE_HEIGHT * i));
     
   }
+  
+   // Scrub bar
+  if(autoplayOn) {
+    stroke(180, 35, 31);
+    strokeWeight(5);
+    // ********************************************************************************
+    // TODO: THIS SHOULD NOT BE HARDCODEDED
+    //       How can we calculate a finer-grained timing than beatsPosition
+    //
+    // Youssef : As this draws something, it should be in the draw() function, or else
+    // the program will randomly crash
+    //
+    // ********************************************************************************
+    scrubPosition = (beatPosition % 16.0) / 16 * WINDOW_WIDTH;
+    line(scrubPosition, CONTROLS_HEIGHT, scrubPosition, WINDOW_HEIGHT);      
+  }
 }
 
 
@@ -171,18 +191,7 @@ void play() {
         PlayArray[i] = false;
       }
     }
-    
-      // Scrub bar
-  if(autoplayOn) {
-    stroke(180, 35, 31);
-    strokeWeight(5);
-    // ********************************************************************************
-    // TODO: THIS SHOULD NOT BE HARDCODEDED
-    //       How can we calculate a finer-grained timing than beatsPosition
-    // ********************************************************************************
-    scrubPosition = (beatPosition % 16.0) / 16 * WINDOW_WIDTH;
-    line(scrubPosition, CONTROLS_HEIGHT, scrubPosition, WINDOW_HEIGHT);
-  }
+   
    
   beatPosition++;
 }
