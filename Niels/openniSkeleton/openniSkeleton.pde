@@ -12,9 +12,9 @@ void setup()
 {
   kinect = new SimpleOpenNI(this);
   kinect.enableDepth();
-  kinect.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL); //Java crash on this line, investigate. May be the
-                                                    //simpleopenni not being compatible with processing 2.0
-  size(640, 480);
+  kinect.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
+  //size(640, 480);
+  size(800, 600);
   fill(255, 0, 0);
 }
 
@@ -31,7 +31,23 @@ void draw()
     {
       drawSkeleton(userId);
     }
-  }
+    
+    //Check gesture
+    
+    if(getJointPos(userId, SimpleOpenNI.SKEL_HEAD).y > getJointPos(userId, SimpleOpenNI.SKEL_LEFT_HAND).y)
+    {
+      println("Head above hand");
+    }else
+    {
+      println("HAND ABOVE HEAD!!"); 
+    }
+   
+    /*
+    println("Hand is at: " + getJointPos(userId, SimpleOpenNI.SKEL_LEFT_HAND).y + " Head is at: " + 
+    getJointPos(userId, SimpleOpenNI.SKEL_HEAD).y);
+    */
+    
+  } 
 }
 
 void drawSkeleton(int userId) 
@@ -108,11 +124,23 @@ void drawJoint(int userId, int jointID)
   ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
 }
 
+PVector getJointPos(int userId, int jointID)
+{
+  PVector joint = new PVector();
+  float confidence = kinect.getJointPositionSkeleton(userId, jointID,
+  joint);
+  return joint; 
+}
+
+
 // user-tracking callbacks!
 void onNewUser(int userId) 
 {
+  kinect.startTrackingSkeleton(userId);
+  /*
   println("start pose detection");
   kinect.startPoseDetection("Psi", userId);
+  */
 }
 
 void onEndCalibration(int userId, boolean successful) {

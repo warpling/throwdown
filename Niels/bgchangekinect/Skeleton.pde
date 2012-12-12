@@ -1,3 +1,5 @@
+//Used for osceleton
+
 class Skeleton {
   // We just use this class as a structure to store the joint coordinates sent by OSC.
   // The format is {x, y, z}, where x and y are in the [0.0, 1.0] interval,
