@@ -33,7 +33,6 @@ void draw()
     }
     
     //Check gesture
-    
     if(getJointPos(userId, SimpleOpenNI.SKEL_HEAD).y > getJointPos(userId, SimpleOpenNI.SKEL_LEFT_HAND).y)
     {
       println("Head above hand");

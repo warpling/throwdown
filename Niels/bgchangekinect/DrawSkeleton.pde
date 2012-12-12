@@ -2,6 +2,11 @@ SimpleOpenNI knct;
 boolean isUser = false;
 int trackedUser;
 
+int skelOriginOffsetX;
+int skelOriginOffsetY;
+float skelScale;
+
+boolean[] smoothGestures = new boolean[5]; //Smoothing array, should prevent jerkiness. Not implemented yet.
 
 Hashtable<Integer, Skeleton> skels = new Hashtable<Integer, Skeleton>();
 
@@ -19,26 +24,29 @@ class DrawSkeleton
     return isUser; 
   }
 
-  void doDrawNI(color bgCol, SimpleOpenNI knct)
+  void doDrawNI(color bgCol, SimpleOpenNI knct, int orgOffX, int orgOffY, int skelScale)
   {
-    background(bgCol);
+    skelOriginOffsetX = orgOffX;
+    skelOriginOffsetY = orgOffY;
+    skelScale = skelScale;
+    
+    //background(bgCol);
     knct = knct;
     IntVector userList = new IntVector();
     kinect.getUsers(userList);
    
     if (userList.size() > 0) 
     {
-      isUser = true; //there is a user
       trackedUser = userList.get(0);
-      
       int userId = userList.get(0);
       if ( kinect.isTrackingSkeleton(userId)) 
       {
+        isUser = true;  //Only when tracking skeleton set userstate to true
         stroke(0);
         strokeWeight(5);
         
         kinect.drawLimb(userId, SimpleOpenNI.SKEL_HEAD,
-        SimpleOpenNI.SKEL_NECK);
+        SimpleOpenNI.SKEL_NECK);                                  //Drawlimb draws line between joints
         kinect.drawLimb(userId, SimpleOpenNI.SKEL_NECK,
         SimpleOpenNI.SKEL_LEFT_SHOULDER);
         kinect.drawLimb(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER,
@@ -98,7 +106,7 @@ class DrawSkeleton
     }
   }
 
-  void drawJoint(int userId, int jointID) 
+  void drawJoint(int userId, int jointID) //add offset x and y 
   {
     PVector joint = new PVector();
     float confidence = kinect.getJointPositionSkeleton(userId, jointID,
@@ -107,8 +115,18 @@ class DrawSkeleton
     {
       return;
     }
-    PVector convertedJoint = new PVector();
-    kinect.convertRealWorldToProjective(joint, convertedJoint);
+    PVector convertedJoint = new PVector();;    kinect.convertRealWorldToProjective(joint, convertedJoint);
+    
+    //Shomehow the coordinates of the skeleton should be mapped on the video.
+    //This code however does not work.
+    /*
+    float ellipseX = convertedJoint.x + skelOriginOffsetX;
+    float ellipseY = convertedJoint.y + skelOriginOffsetX;
+    
+    float radius = 5 / skelScale;
+    ellipse(ellipseX, ellipseY, radius, radius);
+    */
+    
     ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
   }
 
