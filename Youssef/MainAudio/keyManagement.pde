@@ -28,8 +28,8 @@ void initCharArrays(){
 // Keys pressed : playback
 void keyPressed() 
 {
-  if ( key == 't' ) tempo = !tempo;
-  if ( key == 'l' ) autoplay = !autoplay;
+  if ( key == 't' ) tempoOn = !tempoOn;
+  if ( key == 'l' ) autoplayOn = !autoplayOn;
   if ( key == 'q' ) exit();
   
   // Switches the corresponding boolean in PlayArray.

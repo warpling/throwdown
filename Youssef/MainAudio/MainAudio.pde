@@ -31,7 +31,7 @@ char[] numArray, alphArray;
 
 // Tempo variables declaration
 AudioSample Tick, Tock;
-boolean tempo;
+boolean tempoOn;
 int bpm=127, beatPosition=0;
 
 // Number of tracks
@@ -44,8 +44,11 @@ int recordingTrack = 0;
 TimeThread timer;
 
 // Autoplay = play all tracks every k beats
-boolean autoplay = false;
+boolean autoplayOn = false;
 int autoplayBeatNum = 16;
+
+// Scrub bar position
+float scrubPosition = 0;
 
 // -------------------------------------------------------- //
 
@@ -62,12 +65,18 @@ void setup()
   // Arrays initialization
   SamplesArray = new AudioSample[numTracks];
   PlayArray    = new boolean[numTracks];
+  
   // -- Set all the playing booleans to false
-  for (int i=0; i < numTracks; i++)      PlayArray[i] = false;
+  for (int i=0; i < numTracks; i++)
+    PlayArray[i] = false;
   
   // Minim and Timer initialization
   minim = new Minim(this);
   timer = new TimeThread(bpm);
+  // *****************************************************************************
+  // Should this only start if autoplayOn is set to true?? I can't seem to call it
+  // from the "draw" loop without a threading error
+  // *****************************************************************************
   timer.start();
   
   //Initializes the arrays with the "0,1,2,3..." and "a,z,e,r..." sequences
@@ -97,9 +106,9 @@ void setup()
 }
 
 void draw()
-{
+{  
+  print("draw\n");
   drawBackground();
-
   
   // Writes beat number and bar number
   text((beatPosition % 4) + 1, 490, 25);
@@ -107,12 +116,14 @@ void draw()
   
   // Writes recorders state
   for (int i=0; i < numTracks; i++) {
-      if ( Recorders[i].isRecording() )       text("REC", 25, CONTROLS_HEIGHT +  (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
-      else                                    text("...", 25, CONTROLS_HEIGHT + (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
+      if ( Recorders[i].isRecording() )
+        text("REC", 25, CONTROLS_HEIGHT +  (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
+      else
+        text("...", 25, CONTROLS_HEIGHT + (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
   }
 
-  //Generate waveforms
-  for (int i=0; i < numTracks; i++){
+  // Generate waveforms
+  for (int i=0; i < numTracks; i++) {
     // The recording track is of a different color
     if(i == recordingTrack)  stroke(131, 18, 18); else stroke(strokeColor);
 
@@ -123,20 +134,32 @@ void draw()
 }
 
 
-
+// play() gets called repeatedly by the timer if it is running
 void play() {
-  // Tempo tick manager
-  if(tempo){  
+  
+  // If the tempo ticker is on
+  if(tempoOn){  
+    // Play a tock ever 3 beats, followed by a tick
     if ( (beatPosition % 4) == 3 ) Tick.trigger();
     else Tock.trigger();
   }
   
   // If autoplay is active, periodically loop every autoplayBeatNum beats.
-  if(autoplay) {
-    if( beatPosition % autoplayBeatNum == 3 ) {
-      for (int i=0; i < numTracks; i++)      PlayArray[i] = true;
+//  if(autoplayOn) {
+//    if( beatPosition % autoplayBeatNum == 3 ) {
+//      for (int i=0; i < numTracks; i++)
+//        PlayArray[i] = true;
+//    }
+//  }
+
+  // Ryan: It's confusing that these are triggered every 3 beats, when visually they are shown
+  //       as taking 8 seconds?? This should play them at beat 0 only
+  if(autoplayOn) {
+    if(beatPosition % autoplayBeatNum == 0) {
+      for (int i=0; i < numTracks; i++)
+        PlayArray[i] = true;
     }
-  }
+}
   
   
   // Samples stack
@@ -148,6 +171,18 @@ void play() {
         PlayArray[i] = false;
       }
     }
+    
+      // Scrub bar
+  if(autoplayOn) {
+    stroke(180, 35, 31);
+    strokeWeight(5);
+    // ********************************************************************************
+    // TODO: THIS SHOULD NOT BE HARDCODEDED
+    //       How can we calculate a finer-grained timing than beatsPosition
+    // ********************************************************************************
+    scrubPosition = (beatPosition % 16.0) / 16 * WINDOW_WIDTH;
+    line(scrubPosition, CONTROLS_HEIGHT, scrubPosition, WINDOW_HEIGHT);
+  }
    
   beatPosition++;
 }
