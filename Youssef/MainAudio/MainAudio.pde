@@ -107,8 +107,8 @@ void draw()
   
   // Writes recorders state
   for (int i=0; i < numTracks; i++) {
-      if ( Recorders[i].isRecording() )       text("REC", 25, (SAMPLE_HEIGHT / 2) + 100*i);
-      else                                    text("...", 25, (SAMPLE_HEIGHT / 2) + 100*i);
+      if ( Recorders[i].isRecording() )       text("REC", 25, CONTROLS_HEIGHT +  (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
+      else                                    text("...", 25, CONTROLS_HEIGHT + (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
   }
 
   //Generate waveforms
