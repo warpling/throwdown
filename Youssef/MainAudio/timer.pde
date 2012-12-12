@@ -12,26 +12,26 @@ class TimeThread extends Thread {
 
   void run() {
     try {
-  while(isActive) {
-    // calculate time difference since last beat & wait if necessary
-    double timePassed=(System.nanoTime()-previousTime)*1.0e-6;
-    while(timePassed<interval) {
-      timePassed=(System.nanoTime()-previousTime)*1.0e-6;
-    }
-    // insert your midi event sending code here
-    play();
-    
-    // calculate real time until next beat
-    long delay=(long)(interval-(System.nanoTime()-previousTime)*1.0e-6);
-    previousTime=System.nanoTime();
-    if (delay > 0)
-      {
-        Thread.sleep(delay);
+      while(isActive) {
+        // calculate time difference since last beat & wait if necessary
+        double timePassed=(System.nanoTime()-previousTime)*1.0e-6;
+        while(timePassed < interval) {
+          timePassed = (System.nanoTime()-previousTime) * 1.0e-6;
+        }
+        // insert your midi event sending code here
+        play();
+        
+        // calculate real time until next beat
+        long delay   = (long)(interval-(System.nanoTime()-previousTime)*1.0e-6);
+        previousTime = System.nanoTime();
+        
+        if (delay > 0)
+          Thread.sleep(delay);
+       
       }
-  }
     } 
     catch(InterruptedException e) {
-  println("force quit...");
+      println("force quit...");
     }
   }
 }
