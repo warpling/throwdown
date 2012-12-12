@@ -56,7 +56,8 @@ void keyReleased()
         }
         // If not, start recording
         else 
-        {                Recorders[i].beginRecord();
+        {
+          Recorders[i].beginRecord();
         }
      }
   }
