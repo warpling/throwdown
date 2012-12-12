@@ -29,6 +29,8 @@ void initCharArrays(){
 void keyPressed() 
 {
   if ( key == 't' ) tempo = !tempo;
+  if ( key == 'l' ) autoplay = !autoplay;
+  if ( key == 'q' ) exit();
   
   // Switches the corresponding boolean in PlayArray.
   for (int i=0; i < numTracks; i++)
@@ -54,9 +56,28 @@ void keyReleased()
         }
         // If not, start recording
         else 
-        {
-          Recorders[i].beginRecord();
+        {                Recorders[i].beginRecord();
         }
      }
   }
+  
+if ( key == ' ' ) {
+     // if the recorder is recording, stop and save, and go on to the next track
+      if ( Recorders[recordingTrack].isRecording() ) 
+      {
+        Recorders[recordingTrack].endRecord();
+        Recorders[recordingTrack].save();
+        SamplesArray[recordingTrack] = minim.loadSample("SoundFiles/Sample" + recordingTrack + ".wav", 1024);
+        
+        recordingTrack++;
+        recordingTrack = recordingTrack % numTracks;
+      }
+      // If not, start recording
+      else 
+      {
+        Recorders[recordingTrack].beginRecord();
+      }
+ }
+  
+  
 }

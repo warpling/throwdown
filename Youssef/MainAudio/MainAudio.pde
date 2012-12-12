@@ -5,19 +5,24 @@
   * - Plays them back
   * - Plays a tempo
   */
- 
-// Minim declaration 
+  
+// Minim and ddf library
 import ddf.minim.*;
+import controlP5.*;
+
+// --------------- Variables for audio management --------------- //
+
+// Minim declaration 
 Minim minim;
 
 // Audiorecorders declaration
 AudioInput Microphone;
 AudioRecorder[] Recorders;
 
+
 // Audiosamples Arrays declaration
 // -- One array for the samples
 // -- One array for the 'play or not' boolean
-// -- One array for the keys to press
 AudioSample[] SamplesArray;
 boolean[] PlayArray;
 
@@ -32,14 +37,28 @@ int bpm=127, beatPosition=0;
 // Number of tracks
 int numTracks = 8;
 
+// id of the next track to record
+int recordingTrack = 0;
+
 // Timer declaration
 TimeThread timer;
 
+// Autoplay = play all tracks every k beats
+boolean autoplay = false;
+int autoplayBeatNum = 16;
+
+// -------------------------------------------------------- //
+
 void setup()
 {
+  
+  setupInterface();
+
+  
+  
   // Window and font Initialization
-  size(512, 100 * numTracks, P3D);
-  textFont(createFont("Arial", 16));
+  //size(512, 100 * numTracks, P3D);
+  //textFont(createFont("Arial", 16));
   
   // Arrays initialization
   SamplesArray = new AudioSample[numTracks];
@@ -80,31 +99,46 @@ void setup()
 
 void draw()
 {
-  background(0);
-  stroke(255);
+  drawBackground();
+
   
-  // Writes beatPosition
-  //fill(255, 102, 153);  
-  text(beatPosition, 490, 25);
+  // Writes beat number and bar number
+  text((beatPosition % 4) + 1, 490, 25);
+  text((beatPosition / 4),     450, 25);
   
   // Writes recorders state
   for (int i=0; i < numTracks; i++) {   
-      if ( Recorders[i].isRecording() )       text("REC", 5, 47 + 100*i);
-      else                                    text("...", 5, 47 + 100*i);
+      if ( Recorders[i].isRecording() )       text("REC", 25, 147 + 100*i);
+      else                                    text("...", 25, 147 + 100*i);
   }
 
   //Generate waveforms
-  for (int i=0; i < numTracks; i++)      DrawWaveForm(SamplesArray[i],50+100*i);
+  for (int i=0; i < numTracks; i++){
+    // The recording track is of a different color
+    if(i == recordingTrack)  stroke(131, 18, 18); else stroke(strokeColor);
+
+    DrawWaveFrame(SamplesArray[i],150+100*i);
+    DrawWaveForm(SamplesArray[i],150+100*i);
+    
+  }
 }
 
 
 
 void play() {
-  // Tempo manager
-  if(tempo){
-    if ( (beatPosition % 4) == 1 ) Tick.trigger();
+  // Tempo tick manager
+  if(tempo){  
+    if ( (beatPosition % 4) == 3 ) Tick.trigger();
     else Tock.trigger();
   }
+  
+  // If autoplay is active, periodically loop every autoplayBeatNum beats.
+  if(autoplay) {
+    if( beatPosition % autoplayBeatNum == 3 ) {
+      for (int i=0; i < numTracks; i++)      PlayArray[i] = true;
+    }
+  }
+  
   
   // Samples stack
   for (int i=0; i < numTracks; i++)
@@ -115,6 +149,6 @@ void play() {
         PlayArray[i] = false;
       }
     }
-    
+   
   beatPosition++;
 }

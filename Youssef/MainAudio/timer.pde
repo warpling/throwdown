@@ -34,10 +34,4 @@ class TimeThread extends Thread {
   println("force quit...");
     }
   }
-} 
-
-// also shutdown the midi thread when the applet is stopped
-public void stop() {
-    if (timer!=null) timer.isActive=false;
-    super.stop();
 }
