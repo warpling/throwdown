@@ -39,7 +39,7 @@ void keyPressed()
 
 void keyReleased()
 {  
-if ( key == ' ' ) {
+  if ( key == ' ' ) {
      // if the recorder is recording, stop and save, and go on to the next track
       if ( Recorders[recordingTrack].isRecording() ) 
       {
@@ -48,7 +48,7 @@ if ( key == ' ' ) {
         SamplesArray[recordingTrack] = minim.loadSample("SoundFiles/Sample" + recordingTrack + ".wav", 1024);
         
         // Play it at the beat after
-        PlayArray[recordingTrack] = beatPosition;
+        // PlayArray[recordingTrack] = beatPosition;
         
         recordingTrack++;
         recordingTrack = recordingTrack % numTracks;
@@ -57,6 +57,8 @@ if ( key == ' ' ) {
       else 
       {
         Recorders[recordingTrack].beginRecord();
+        // Use the current beat as the starting point for when we save it
+        PlayArray[recordingTrack] = beatPosition;
       }
   }
 }

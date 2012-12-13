@@ -1,7 +1,8 @@
 
 // Draws dynamic waveform for a sample at a given vertical position.
-void DrawWaveForm(AudioSample sample,int position, int beat){
+void DrawWaveForm(AudioSample sample, int position, int beat){
   int barLength = sample.length()/LENGTH_OF_LOOP - 20;
+  // Space between left side of window and left edge of sample
   int margin = WINDOW_WIDTH / NUMBER_OF_MARKERS;
     
   if(beat != -1){
