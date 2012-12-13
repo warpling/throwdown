@@ -8,7 +8,6 @@ Possibly a different way to draw skeleton:
 http://learning.codasign.com/index.php?title=Trigger_Audio_When_a_Skeleton_is_Tracked
 */
 
-import netP5.*;
 import SimpleOpenNI.*;
 
 int currentUser;
@@ -17,6 +16,7 @@ float headPosY;
 float lHandPosY;
 
 SimpleOpenNI  kinect;
+PoseRule ruleOne;
 
 DrawSkeleton dskel;
 color bgColor = color(0,0,255);
@@ -34,7 +34,10 @@ void setup()
      return;
   }
  kinect.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
-   
+ 
+ //Add a rule
+ ruleOne = new PoseRule(kinect, SimpleOpenNI.SKEL_LEFT_HAND, PoseRule.ABOVE, SimpleOpenNI.SKEL_HEAD);
+ 
 }
 void draw()
 {  
@@ -42,17 +45,18 @@ void draw()
   //If you hand is above your head change BG color, otherwise change it back to how it was.
   background(bgColor); //repaint bg color
 
+  //println("user there? " + dskel.isUser());
   if(dskel.isUser())
   {
-    //Each comparison should automatically be smoothed out. 
-    if(dskel.getJointPos(SimpleOpenNI.SKEL_HEAD).y > dskel.getJointPos(SimpleOpenNI.SKEL_LEFT_HAND).y)
+    float confHandOverHead = ruleOne.check(currentUser);
+    //Check rules
+    if(confHandOverHead > .50)  //If more confidence that .5
     {
-      //println("Head above hand");
-      bgColor = color(0,0,255);
+      bgColor = color(255, 0, 0); 
     }else
     {
-      //println("HAND ABOVE HEAD!!");
-      bgColor = color(255, 0, 0);
+      //println("Confidence : " + confHandOverHead);
+      bgColor = color(0,0,255);
     }
     background(bgColor);
   }
@@ -71,7 +75,6 @@ void draw()
   image(kinect.depthImage(),int(width/2-80),int(height-120), 160, 120);
 }
 
-
 // user-tracking callbacks!
 void onNewUser(int userId) 
 {
@@ -84,6 +87,7 @@ void onEndCalibration(int userId, boolean successful) {
   {
     println(" User calibrated !!!");
     kinect.startTrackingSkeleton(userId);
+    currentUser = userId;
   }
   else {
   println(" Failed to calibrate user !!!");

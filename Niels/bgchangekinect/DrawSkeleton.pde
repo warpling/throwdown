@@ -6,10 +6,6 @@ int skelOriginOffsetX;
 int skelOriginOffsetY;
 float skelScale;
 
-boolean[] smoothGestures = new boolean[5]; //Smoothing array, should prevent jerkiness. Not implemented yet.
-
-Hashtable<Integer, Skeleton> skels = new Hashtable<Integer, Skeleton>();
-
 class DrawSkeleton
 {
   
@@ -115,18 +111,8 @@ class DrawSkeleton
     {
       return;
     }
-    PVector convertedJoint = new PVector();;    kinect.convertRealWorldToProjective(joint, convertedJoint);
-    
-    //Shomehow the coordinates of the skeleton should be mapped on the video.
-    //This code however does not work.
-    /*
-    float ellipseX = convertedJoint.x + skelOriginOffsetX;
-    float ellipseY = convertedJoint.y + skelOriginOffsetX;
-    
-    float radius = 5 / skelScale;
-    ellipse(ellipseX, ellipseY, radius, radius);
-    */
-    
+    PVector convertedJoint = new PVector();    
+    kinect.convertRealWorldToProjective(joint, convertedJoint);
     ellipse(convertedJoint.x, convertedJoint.y, 5, 5);
   }
 
