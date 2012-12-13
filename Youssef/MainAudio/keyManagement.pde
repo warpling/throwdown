@@ -2,6 +2,14 @@
 // This is very ugly, but I couldnt find another way to convert an int to its corresponding char
 // (it converts to its ASCII code)
 
+final char tempo_key  = 't';
+final char quit_key   = 'q';
+final char pause_key  = 'p';
+final char record_key = ' ';
+
+
+
+
 void initCharArrays(){
     numArray = new char[NUMBER_OF_SAMPLES];
     if (NUMBER_OF_SAMPLES -1 >= 0) numArray[0] = '0';
@@ -18,18 +26,20 @@ void initCharArrays(){
 // Keys pressed : playback
 void keyPressed() 
 {
-  if ( key == 't' ) tempoOn = !tempoOn;
-  else if ( key == 'q' ) exit();
+  if (key == temp_key)
+    tempoOn = !tempoOn;
+  else if (key == quit_key)
+    exit();
   
   // Pause
-  else if ( key == 'p' ){
+  else if ( key == pause_key ){
     for (int i=0; i < NUMBER_OF_SAMPLES; i++){
       PlayArray[i] = -1;
       SamplesArray[i].stop();
     }
   }
   
-  else if ( key == ' ' ) {
+  else if (key == record_key) {
     
     // if the stack is full, ignore the key press
     if(recordingTrack >= 0) {
@@ -55,6 +65,8 @@ void keyPressed()
       }
     } 
   }
+
+  else if ( key == '')
   
   // Plays the corresponding track on the beat.
 //  for (int i=0; i < NUMBER_OF_SAMPLES; i++)
