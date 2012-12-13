@@ -11,7 +11,6 @@ import ddf.minim.*;
 import controlP5.*;
 import SimpleOpenNI.*;
 
-final int NUMBER_OF_SAMPLES  = 8;
 final int NOT_PLAYING = -1;
 
 // --------------- Variables for audio management --------------- //
@@ -51,7 +50,7 @@ int numBeats = 16;
 
 // id of the next track to record
 // (layer position)
-int recordingTrack = NUMBER_OF_SAMPLES - 1;
+int recordingTrack;
 
 // Timer declaration
 TimeThread timer;
@@ -63,7 +62,8 @@ float scrubPosition = 0;
 
 void setup()
 {
-  
+  // Where we'll start recording
+  recordingTrack = NUMBER_OF_SAMPLES - 1; 
   setupInterface();
   
   // Kinect initialization
@@ -161,11 +161,11 @@ void draw()
   for (int i=0; i < NUMBER_OF_SAMPLES; i++) {
       if ( Recorders[i].isRecording() ) {
         fill(255, 0, 0);
-        text("•", 25, CONTROLS_HEIGHT +  (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
+        text("•", 30, CONTROLS_HEIGHT +  (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
       }
       else {
         fill(255, 255, 255);
-        text("", 25, CONTROLS_HEIGHT + (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
+        text("–––", 25, CONTROLS_HEIGHT + (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
       }
   }
 

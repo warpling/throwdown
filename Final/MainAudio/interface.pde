@@ -5,7 +5,7 @@ final int WINDOW_WIDTH    = 1440;
 final int WINDOW_HEIGHT   = 900;
 
 // Beat Constants
-//final int NUMBER_OF_SAMPLES  = 8;
+final int NUMBER_OF_SAMPLES  = 8;
 final int LENGTH_OF_LOOP     = 8; // in seconds
 final int NUMBER_OF_MARKERS  = 16; // number of vertical line markers
 //final int LEFT_MARGIN        = WINDOW_WIDTH / NUMBER_OF_MARKERS;
@@ -18,6 +18,7 @@ final int BUTTON_Y_POS    = (CONTROLS_HEIGHT - BUTTON_HEIGHT) / 2;
 
 // Layout
 final int SAMPLE_HEIGHT   = (WINDOW_HEIGHT - CONTROLS_HEIGHT) / NUMBER_OF_SAMPLES;
+final int COLUMN_WIDTH    = WINDOW_WIDTH / NUMBER_OF_SAMPLES;
 
 ControlP5 controlP5;
 int backgroundColor = color(42,44,59);
@@ -32,7 +33,7 @@ void setupInterface() {
   
   PFont pfont = createFont("Arial", 60, true);
   ControlFont arial60 = new ControlFont(pfont, 60);
-  ControlFont arial10 = new ControlFont(pfont, 10);
+//  ControlFont arial10 = new ControlFont(pfont, 10);
 
   // Add the + button
 //  controlP5.addButton("plus")
