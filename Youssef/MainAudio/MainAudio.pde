@@ -19,33 +19,29 @@ Minim minim;
 AudioInput Microphone;
 AudioRecorder[] Recorders;
 
-
 // Audiosamples Arrays declaration
 // -- One array for the samples
-// -- One array for the 'play or not' boolean
+// -- One array for the beat the sample is playing at
 AudioSample[] SamplesArray;
-boolean[] PlayArray;
+int[] PlayArray;
 
-// Arrays containing the char sequences "0,1,2.." and "a,b,c.." for control purposes
-char[] numArray, alphArray;
+// Array containing the char sequences "0,1,2.." for control purposes
+char[] numArray;
 
 // Tempo variables declaration
 AudioSample Tick, Tock;
 boolean tempoOn;
 int bpm=127, beatPosition=0;
 
-// Number of tracks
+// Number of tracks and beats
 int numTracks = 8;
+int numBeats = 16;
 
 // id of the next track to record
 int recordingTrack = 0;
 
 // Timer declaration
 TimeThread timer;
-
-// Autoplay = play all tracks every k beats
-boolean autoplayOn = false;
-int autoplayBeatNum = 16;
 
 // Scrub bar position
 float scrubPosition = 0;
@@ -56,31 +52,18 @@ void setup()
 {
   
   setupInterface();
-
-  print(SAMPLE_HEIGHT);
-  // Window and font Initialization
-  //size(512, 100 * numTracks, P3D);
-  //textFont(createFont("Arial", 16));
   
   // Arrays initialization
   SamplesArray = new AudioSample[numTracks];
-  PlayArray    = new boolean[numTracks];
+  PlayArray    = new int[numTracks];
   
-  // -- Set all the playing booleans to false
+  // -- Set all the playing arrays to -1 = not playing
   for (int i=0; i < numTracks; i++)
-    PlayArray[i] = false;
+    PlayArray[i] = -1;
   
   // Minim and Timer initialization
   minim = new Minim(this);
   timer = new TimeThread(bpm);
-  // *****************************************************************************
-  // Should this only start if autoplayOn is set to true?? I can't seem to call it
-  // from the "draw" loop without a threading error
-  //
-  // The timer is in a separate thread and always running. autoplayOn tells the 
-  // program wether or not to loop the samples ( = play them again after 
-  // a number (autoplayBeatNum) of beats. 
-  // *****************************************************************************
   timer.start();
   
   //Initializes the arrays with the "0,1,2,3..." and "a,z,e,r..." sequences
@@ -111,7 +94,6 @@ void setup()
 
 void draw()
 {  
-  print("draw\n");
   drawBackground();
   
   // Writes beat number and bar number
@@ -131,26 +113,16 @@ void draw()
     // The recording track is of a different color
     if(i == recordingTrack)  stroke(131, 18, 18); else stroke(strokeColor);
 
-    DrawWaveFrame(SamplesArray[i], CONTROLS_HEIGHT + (SAMPLE_HEIGHT/2) + (SAMPLE_HEIGHT * i));
-    DrawWaveForm(SamplesArray[i], CONTROLS_HEIGHT + (SAMPLE_HEIGHT/2) + (SAMPLE_HEIGHT * i));
+    DrawWaveFrame(SamplesArray[i], CONTROLS_HEIGHT + (SAMPLE_HEIGHT/2) + (SAMPLE_HEIGHT * i), PlayArray[i]);
+    DrawWaveForm(SamplesArray[i], CONTROLS_HEIGHT + (SAMPLE_HEIGHT/2) + (SAMPLE_HEIGHT * i),  PlayArray[i]);
     
   }
   
    // Scrub bar
-  if(autoplayOn) {
     stroke(180, 35, 31);
     strokeWeight(5);
-    // ********************************************************************************
-    // TODO: THIS SHOULD NOT BE HARDCODEDED
-    //       How can we calculate a finer-grained timing than beatsPosition
-    //
-    // Youssef : As this draws something, it should be in the draw() function, or else
-    // the program will randomly crash
-    //
-    // ********************************************************************************
     scrubPosition = (beatPosition % 16.0) / 16 * WINDOW_WIDTH;
     line(scrubPosition, CONTROLS_HEIGHT, scrubPosition, WINDOW_HEIGHT);      
-  }
 }
 
 
@@ -164,34 +136,16 @@ void play() {
     else Tock.trigger();
   }
   
-  // If autoplay is active, periodically loop every autoplayBeatNum beats.
-//  if(autoplayOn) {
-//    if( beatPosition % autoplayBeatNum == 3 ) {
-//      for (int i=0; i < numTracks; i++)
-//        PlayArray[i] = true;
-//    }
-//  }
-
-  // Ryan: It's confusing that these are triggered every 3 beats, when visually they are shown
-  //       as taking 8 seconds?? This should play them at beat 0 only
-  if(autoplayOn) {
-    if(beatPosition % autoplayBeatNum == 0) {
-      for (int i=0; i < numTracks; i++)
-        PlayArray[i] = true;
-    }
-}
   
-  
-  // Samples stack
+  // Samples stack : plays the samples on their beat
   for (int i=0; i < numTracks; i++)
     {
-      if(PlayArray[i]) {
+      if(PlayArray[i] == beatPosition) {
         SamplesArray[i].stop();
         SamplesArray[i].trigger();
-        PlayArray[i] = false;
       }
     }
    
-   
   beatPosition++;
+  beatPosition = beatPosition % numBeats;
 }

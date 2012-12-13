@@ -8,7 +8,6 @@ final int WINDOW_HEIGHT   = 900;
 final int NUMBER_OF_SAMPLES  = 8;
 final int LENGTH_OF_LOOP     = 8; // in seconds
 final int NUMBER_OF_MARKERS  = 16; // number of vertical line markers
-//final int FPS                = 60; // Hopefully we can use a timing object instead
 
 // Controls
 final int CONTROLS_HEIGHT = 100;
