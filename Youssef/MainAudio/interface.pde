@@ -8,7 +8,7 @@ final int WINDOW_HEIGHT   = 900;
 //final int NUMBER_OF_SAMPLES  = 8;
 final int LENGTH_OF_LOOP     = 8; // in seconds
 final int NUMBER_OF_MARKERS  = 16; // number of vertical line markers
-
+final int LEFT_MARGIN        = WINDOW_WIDTH / NUMBER_OF_MARKERS
 // Controls
 final int CONTROLS_HEIGHT = 100;
 final int BUTTON_WIDTH    = 150;

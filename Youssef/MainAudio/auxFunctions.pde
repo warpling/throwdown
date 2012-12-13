@@ -3,12 +3,16 @@
 void DrawWaveForm(AudioSample sample, int position, int beat){
   int barLength = sample.length()/LENGTH_OF_LOOP - 20;
   // Space between left side of window and left edge of sample
-  int margin = WINDOW_WIDTH / NUMBER_OF_MARKERS;
     
   if(beat != -1){
+    
+    // Draw the entire waveform comprised of lots of vertical lines
     for (int i = 0; i < barLength;  i++)
     {
-      line(i + margin + beat * margin, position - sample.left.get(i)*25, i-1 + margin + beat * margin, position - sample.left.get(i+1)*10);
+      line(i + LEFT_MARGIN + beat * LEFT_MARGIN,
+           position - sample.left.get(i)*25,
+           i-1 + LEFT_MARGIN + beat * LEFT_MARGIN,
+           position - sample.left.get(i+1)*10);
     }
   }
 }
@@ -16,14 +20,14 @@ void DrawWaveForm(AudioSample sample, int position, int beat){
 // Draws the frame corresponding to the loop time
 void DrawWaveFrame(AudioSample sample,int position, int beat){
 
-  int margin = WINDOW_WIDTH / NUMBER_OF_MARKERS;
+  int LEFT_MARGIN = WINDOW_WIDTH / NUMBER_OF_MARKERS;
   
   // Computes bar length
   float barLength = WINDOW_WIDTH * ((sample.length() / 1000.0)) / LENGTH_OF_LOOP;
   
   if(beat != -1){
     strokeWeight(5);
-    rect(margin + beat * margin, position - 40, barLength, 80, 40);
+    rect(LEFT_MARGIN + beat * LEFT_MARGIN, position - 40, barLength, 80, 40);
     strokeWeight(1);
   }
 }
