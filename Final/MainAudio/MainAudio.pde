@@ -42,7 +42,7 @@ char[] numArray;
 // Tempo variables declaration
 AudioSample Tick, Tock;
 boolean tempoOn;
-int bpm = 127;
+int bpm = 204;//127;
 int beatPosition = 0;
 
 // Number of tracks and beats
@@ -100,7 +100,8 @@ void setup()
   Tock = minim.loadSample( "SoundFiles/tock.mp3", 1024);
   
   //Load default samples - Needed to have waveforms at startup
-//  if (numTracks -1 >= 0) SamplesArray[0] = minim.loadSample( "SoundFiles/TechHouse 1 - Lead.mp3", 1024);
+//    SamplesArray[0] = minim.loadSample( "SoundFiles/TechHouse 1 - Lead.mp3", 1024);
+//    PlayArray[0]    = 0;
 //  if (numTracks -1 >= 1) SamplesArray[1] = minim.loadSample( "SoundFiles/TechHouse 1 - Drums.mp3", 1024);
 //  if (numTracks -1 >= 2) SamplesArray[2] = minim.loadSample( "SoundFiles/TechHouse 1 - Bass.mp3", 1024);
 //  if (numTracks -1 >= 3) SamplesArray[3] = minim.loadSample( "SoundFiles/TechHouse 1 - Perc.mp3", 1024);
