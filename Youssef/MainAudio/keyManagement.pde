@@ -19,27 +19,17 @@ void initCharArrays(){
 void keyPressed() 
 {
   if ( key == 't' ) tempoOn = !tempoOn;
-  if ( key == 'q' ) exit();
+  else if ( key == 'q' ) exit();
   
   // Pause
-  if ( key == 'p' ){
+  else if ( key == 'p' ){
     for (int i=0; i < NUMBER_OF_SAMPLES; i++){
       PlayArray[i] = -1;
       SamplesArray[i].stop();
     }
   }
   
-  // Plays the corresponding track on the beat.
-  for (int i=0; i < NUMBER_OF_SAMPLES; i++)
-  {
-     if ( key == numArray[i] ) {PlayArray[i] = beatPosition;}
-  }
-}
-
-
-void keyReleased()
-{  
-  if ( key == ' ' ) {
+  else if ( key == ' ' ) {
     
     // if the stack is full, ignore the key press
     if(recordingTrack >= 0) {
@@ -65,4 +55,16 @@ void keyReleased()
       }
     } 
   }
+  
+  // Plays the corresponding track on the beat.
+//  for (int i=0; i < NUMBER_OF_SAMPLES; i++)
+//  {
+//     if ( key == numArray[i] ) {PlayArray[i] = beatPosition;}
+//  }
+}
+
+
+void keyReleased()
+{  
+  
 }
