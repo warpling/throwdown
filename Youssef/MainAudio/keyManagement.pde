@@ -6,9 +6,7 @@ final char tempo_key  = 't';
 final char quit_key   = 'q';
 final char pause_key  = 'p';
 final char record_key = ' ';
-
-
-
+final char delete_key = 'd';
 
 void initCharArrays(){
     numArray = new char[NUMBER_OF_SAMPLES];
@@ -22,61 +20,59 @@ void initCharArrays(){
     if (NUMBER_OF_SAMPLES -1 >= 7) numArray[7] = '7';
 }
 
-
-// Keys pressed : playback
 void keyPressed() 
 {
-  if (key == temp_key)
-    tempoOn = !tempoOn;
-  else if (key == quit_key)
-    exit();
-  
-  // Pause
-  else if ( key == pause_key ){
-    for (int i=0; i < NUMBER_OF_SAMPLES; i++){
-      PlayArray[i] = -1;
-      SamplesArray[i].stop();
-    }
-  }
-  
-  else if (key == record_key) {
+
+  switch(key) {
+
+    case tempo_key:
+      tempoOn = !tempoOn;
+      break;
+
+    case quit_key:
+      exit();
+      break;
+
+    case pause_key:
+      for (int i=0; i < NUMBER_OF_SAMPLES; i++) {
+        PlayArray[i] = -1;
+        SamplesArray[i].stop();
+      }
+      break;
+
+    case record_key:
+      // only record if the stack isn't full, otherwise ignore the key press
+      if(recordingTrack >= 0) {
+
+        // if the recorder is recording, stop and save, and go on to the next track
+        if (Recorders[recordingTrack].isRecording() ) 
+        {
+          Recorders[recordingTrack].endRecord();
+          Recorders[recordingTrack].save();
+          SamplesArray[recordingTrack] = minim.loadSample("SoundFiles/Sample" + recordingTrack + ".wav", 1024);
+          
+          // Play it at the beat after
+          // PlayArray[recordingTrack] = beatPosition;
+          
+          recordingTrack = (recordingTrack - 1) % NUMBER_OF_SAMPLES;
+        }
+        // If nothing is recording, start recording
+        else 
+        {
+          Recorders[recordingTrack].beginRecord();
+          // Use the current beat as the starting point for when we save it
+          PlayArray[recordingTrack] = beatPosition;
+        }
+      } 
+      break;
+
+    case delete_key:
+      SamplesArray[++recordingTrack] = null;
+      PlayArray[recordingTrack] = -1;
+    break;
     
-    // if the stack is full, ignore the key press
-    if(recordingTrack >= 0) {
-      // if the recorder is recording, stop and save, and go on to the next track
-      if (Recorders[recordingTrack].isRecording() ) 
-      {
-        Recorders[recordingTrack].endRecord();
-        Recorders[recordingTrack].save();
-        SamplesArray[recordingTrack] = minim.loadSample("SoundFiles/Sample" + recordingTrack + ".wav", 1024);
-        
-        // Play it at the beat after
-        // PlayArray[recordingTrack] = beatPosition;
-        
-        recordingTrack--;
-        recordingTrack = recordingTrack % NUMBER_OF_SAMPLES;
-      }
-      // If not, start recording
-      else 
-      {
-        Recorders[recordingTrack].beginRecord();
-        // Use the current beat as the starting point for when we save it
-        PlayArray[recordingTrack] = beatPosition;
-      }
-    } 
   }
-
-  else if ( key == '')
-  
-  // Plays the corresponding track on the beat.
-//  for (int i=0; i < NUMBER_OF_SAMPLES; i++)
-//  {
-//     if ( key == numArray[i] ) {PlayArray[i] = beatPosition;}
-//  }
 }
 
 
-void keyReleased()
-{  
-  
-}
+void keyReleased(){}
