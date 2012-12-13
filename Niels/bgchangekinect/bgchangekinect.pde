@@ -23,9 +23,10 @@ color bgColor = color(0,0,255);
 
 void setup() 
 {
-  size(800, 600);
-  dskel = new DrawSkeleton();
+  size(640, 480);
+  
   kinect = new SimpleOpenNI(this);
+  dskel = new DrawSkeleton();
   
   if(kinect.enableDepth() == false)
   {
@@ -39,40 +40,26 @@ void setup()
  ruleOne = new PoseRule(kinect, SimpleOpenNI.SKEL_LEFT_HAND, PoseRule.ABOVE, SimpleOpenNI.SKEL_HEAD);
  
 }
-void draw()
+boolean isRightHandOverHead()
 {  
   kinect.update();
-  //If you hand is above your head change BG color, otherwise change it back to how it was.
-  background(bgColor); //repaint bg color
 
-  //println("user there? " + dskel.isUser());
   if(dskel.isUser())
   {
     float confHandOverHead = ruleOne.check(currentUser);
     //Check rules
     if(confHandOverHead > .50)  //If more confidence that .5
     {
-      bgColor = color(255, 0, 0); 
+      return true; 
     }else
     {
-      //println("Confidence : " + confHandOverHead);
-      bgColor = color(0,0,255);
+      return false;
     }
-    background(bgColor);
   }
-  else
-  {
-    bgColor = color(0,0,255);
-    textSize(34);
-    text("Please stand in front of the Camera", 10, 30); 
-    fill(205, 202, 103);
-  }
+
   
   //Extra argument include pos of image. Scale is set to 5, should be 5 times as small as full screen
   dskel.doDrawNI(bgColor, kinect, int(width/2-80), int(height-120), 5); 
-
-  //Draw cam footage
-  image(kinect.depthImage(),int(width/2-80),int(height-120), 160, 120);
 }
 
 // user-tracking callbacks!
