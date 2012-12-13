@@ -153,10 +153,12 @@ void draw()
   
   // Writes beat number and bar number
   // TODO: Fix to display the "tick/tock"
-  text((beatPosition % 4) + 1, 490, 25);
-  text((beatPosition / 4),     450, 25);
+  //  text((beatPosition % 4) + 1, 490, 25);
+  //  text((beatPosition / 4),     450, 25);
   
   // Writes recorders state
+  PFont pfont = createFont("Arial", 60, true);
+  ControlFont arial60 = new ControlFont(pfont, 60);
   textSize(32);
   for (int i=0; i < NUMBER_OF_SAMPLES; i++) {
       if ( Recorders[i].isRecording() ) {
@@ -165,7 +167,7 @@ void draw()
       }
       else {
         fill(255, 255, 255);
-        text("–––", 25, CONTROLS_HEIGHT + (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
+        text("–––", 20, CONTROLS_HEIGHT + (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
       }
   }
 

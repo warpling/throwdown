@@ -9,6 +9,7 @@ void DrawWaveForm(AudioSample sample, int position, int beat) {
   if(beat != -1){
     
     // Draw the entire waveform comprised of lots of vertical lines
+    stroke(255);
     for (int i = 0; i < barLength;  i++)
     {
       line(i + LEFT_MARGIN + (beat * COLUMN_WIDTH),
@@ -22,13 +23,16 @@ void DrawWaveForm(AudioSample sample, int position, int beat) {
 // Draws the frame corresponding to the loop time
 void DrawWaveFrame(AudioSample sample,int position, int beat){
   
+  print("adding at " + beat + "\n");
+  
   // Computes bar length
-  float barLength = WINDOW_WIDTH * ((sample.length() / 1000.0)) / LENGTH_OF_LOOP;
+  float barLength = WINDOW_WIDTH * (sample.length() / 1000.0) / LENGTH_OF_LOOP;
   
   if(beat != -1){
+    stroke(12,12,158);
     strokeWeight(5);
+    fill(12,12,158);
     rect(beat * COLUMN_WIDTH, position - 40, barLength, 80, 40);
-    strokeWeight(1);
   }
 }
 

@@ -18,7 +18,7 @@ final int BUTTON_Y_POS    = (CONTROLS_HEIGHT - BUTTON_HEIGHT) / 2;
 
 // Layout
 final int SAMPLE_HEIGHT   = (WINDOW_HEIGHT - CONTROLS_HEIGHT) / NUMBER_OF_SAMPLES;
-final int COLUMN_WIDTH    = WINDOW_WIDTH / NUMBER_OF_SAMPLES;
+final int COLUMN_WIDTH    = WINDOW_WIDTH / NUMBER_OF_MARKERS;
 
 ControlP5 controlP5;
 int backgroundColor = color(42,44,59);
