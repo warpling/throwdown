@@ -3,15 +3,15 @@
 // (it converts to its ASCII code)
 
 void initCharArrays(){
-    numArray = new char[numTracks];
-    if (numTracks -1 >= 0) numArray[0] = '0';
-    if (numTracks -1 >= 1) numArray[1] = '1';
-    if (numTracks -1 >= 2) numArray[2] = '2';
-    if (numTracks -1 >= 3) numArray[3] = '3';
-    if (numTracks -1 >= 4) numArray[4] = '4';
-    if (numTracks -1 >= 5) numArray[5] = '5';
-    if (numTracks -1 >= 6) numArray[6] = '6';
-    if (numTracks -1 >= 7) numArray[7] = '7';
+    numArray = new char[NUMBER_OF_SAMPLES];
+    if (NUMBER_OF_SAMPLES -1 >= 0) numArray[0] = '0';
+    if (NUMBER_OF_SAMPLES -1 >= 1) numArray[1] = '1';
+    if (NUMBER_OF_SAMPLES -1 >= 2) numArray[2] = '2';
+    if (NUMBER_OF_SAMPLES -1 >= 3) numArray[3] = '3';
+    if (NUMBER_OF_SAMPLES -1 >= 4) numArray[4] = '4';
+    if (NUMBER_OF_SAMPLES -1 >= 5) numArray[5] = '5';
+    if (NUMBER_OF_SAMPLES -1 >= 6) numArray[6] = '6';
+    if (NUMBER_OF_SAMPLES -1 >= 7) numArray[7] = '7';
 }
 
 
@@ -23,14 +23,14 @@ void keyPressed()
   
   // Pause
   if ( key == 'p' ){
-    for (int i=0; i < numTracks; i++){
+    for (int i=0; i < NUMBER_OF_SAMPLES; i++){
       PlayArray[i] = -1;
       SamplesArray[i].stop();
     }
   }
   
   // Plays the corresponding track on the beat.
-  for (int i=0; i < numTracks; i++)
+  for (int i=0; i < NUMBER_OF_SAMPLES; i++)
   {
      if ( key == numArray[i] ) {PlayArray[i] = beatPosition;}
   }
@@ -40,8 +40,11 @@ void keyPressed()
 void keyReleased()
 {  
   if ( key == ' ' ) {
-     // if the recorder is recording, stop and save, and go on to the next track
-      if ( Recorders[recordingTrack].isRecording() ) 
+    
+    // if the stack is full, ignore the key press
+    if(recordingTrack >= 0) {
+      // if the recorder is recording, stop and save, and go on to the next track
+      if (Recorders[recordingTrack].isRecording() ) 
       {
         Recorders[recordingTrack].endRecord();
         Recorders[recordingTrack].save();
@@ -50,8 +53,8 @@ void keyReleased()
         // Play it at the beat after
         // PlayArray[recordingTrack] = beatPosition;
         
-        recordingTrack++;
-        recordingTrack = recordingTrack % numTracks;
+        recordingTrack--;
+        recordingTrack = recordingTrack % NUMBER_OF_SAMPLES;
       }
       // If not, start recording
       else 
@@ -60,5 +63,6 @@ void keyReleased()
         // Use the current beat as the starting point for when we save it
         PlayArray[recordingTrack] = beatPosition;
       }
+    } 
   }
 }

@@ -10,6 +10,7 @@
 import ddf.minim.*;
 import controlP5.*;
 
+final int NUMBER_OF_SAMPLES  = 8;
 final int NOT_PLAYING = -1;
 
 // --------------- Variables for audio management --------------- //
@@ -33,15 +34,15 @@ char[] numArray;
 // Tempo variables declaration
 AudioSample Tick, Tock;
 boolean tempoOn;
-int bpm=127, beatPosition=0;
+int bpm = 127;
+int beatPosition = 0;
 
 // Number of tracks and beats
-int numTracks = 8;
 int numBeats = 16;
 
 // id of the next track to record
 // (layer position)
-int recordingTrack = 0;
+int recordingTrack = NUMBER_OF_SAMPLES - 1;
 
 // Timer declaration
 TimeThread timer;
@@ -57,11 +58,11 @@ void setup()
   setupInterface();
   
   // Arrays initialization
-  SamplesArray = new AudioSample[numTracks];
-  PlayArray    = new int[numTracks];
+  SamplesArray = new AudioSample[NUMBER_OF_SAMPLES];
+  PlayArray    = new int[NUMBER_OF_SAMPLES];
   
   // -- Set all the playing arrays to -1 = not playing
-  for (int i=0; i < numTracks; i++)
+  for (int i=0; i < NUMBER_OF_SAMPLES; i++)
     PlayArray[i] = NOT_PLAYING;
   
   // Minim and Timer initialization
@@ -74,10 +75,10 @@ void setup()
   
   // Setup recorders
   Microphone = minim.getLineIn();
-  Recorders = new AudioRecorder[numTracks];
+  Recorders = new AudioRecorder[NUMBER_OF_SAMPLES];
   
   // Sets up each recorder with an audio file to save to
-  for (int i=0; i < numTracks; i++) {
+  for (int i=0; i < NUMBER_OF_SAMPLES; i++) {
       Recorders[i] = minim.createRecorder(Microphone, "data/SoundFiles/Sample" + numArray[i] + ".wav", false);
     }
     
@@ -106,7 +107,7 @@ void draw()
   text((beatPosition / 4),     450, 25);
   
   // Writes recorders state
-  for (int i=0; i < numTracks; i++) {
+  for (int i=0; i < NUMBER_OF_SAMPLES; i++) {
       if ( Recorders[i].isRecording() )
         text("REC", 25, CONTROLS_HEIGHT +  (SAMPLE_HEIGHT / 2) + SAMPLE_HEIGHT*i);
       else
@@ -114,7 +115,7 @@ void draw()
   }
 
   // Generate waveforms
-  for (int i=0; i < numTracks; i++) {
+  for (int i=0; i < NUMBER_OF_SAMPLES; i++) {
     // The recording track is of a different color
     if(i == recordingTrack)
       stroke(131, 18, 18);
@@ -150,7 +151,7 @@ void play() {
   
   
   // Samples stack : plays the samples on their beat
-  for (int i=0; i < numTracks; i++)
+  for (int i=0; i < NUMBER_OF_SAMPLES; i++)
     {
       if(PlayArray[i] == beatPosition) {
         if(SamplesArray[i] != null) {

@@ -35,7 +35,7 @@ public void stop() {
   Tick.close();
   Tock.close();
   
-  for (int i=0; i < numTracks; i++) {
+  for (int i=0; i < NUMBER_OF_SAMPLES; i++) {
     SamplesArray[i].close();
   }
   
