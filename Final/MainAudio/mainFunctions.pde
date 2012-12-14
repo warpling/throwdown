@@ -37,8 +37,14 @@ void toggleRecord() {
 void delete() {
   // Don't try to delete if the stack is empty
   if(recordingTrack < NUMBER_OF_SAMPLES - 1) {
+    
     SamplesArray[++recordingTrack] = null;
     PlayArray[recordingTrack] = -1;
+    
+    File f = new File("SoundFiles/Sample" + recordingTrack + ".wav", 1024);
+    if (f.exists()) {
+      f.delete();
+    }
   }
 }
 
