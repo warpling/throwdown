@@ -21,7 +21,8 @@ void toggleRecord() {
       // Play it at the beat after
       // PlayArray[recordingTrack] = beatPosition;
       
-      recordingTrack = (recordingTrack - 1) % NUMBER_OF_SAMPLES;
+//      recordingTrack = (recordingTrack - 1) % NUMBER_OF_SAMPLES;
+      recordingTrack--;
     }
     // If nothing is recording, start recording
     else 
