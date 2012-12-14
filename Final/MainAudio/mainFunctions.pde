@@ -38,6 +38,7 @@ void delete() {
   // Don't try to delete if the stack is empty
   if(recordingTrack < NUMBER_OF_SAMPLES - 1) {
     
+    SamplesArray[++recordingTrack].close();
     SamplesArray[++recordingTrack] = null;
     PlayArray[recordingTrack] = -1;
     
