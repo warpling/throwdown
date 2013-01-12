@@ -12,10 +12,10 @@ The Gestures
 ----------------
 The current *gestures* are more like poses if anything. They comprise of...
 
-* right hand above head : start recording track
-* hands by side         : nothing, or stop recording track and add to stack
-* left hand above head  : delete top track on strack
-* both hands above head : toggle tempo beat
+* **right hand above head** : start recording track
+* **hands by side**         : nothing, or stop recording track and add to stack
+* **left hand above head** : delete top track on strack
+* **both hands above head** : toggle tempo beat
 
 
 The Code
@@ -24,4 +24,4 @@ The Code
 Like all good school projects, we tried to the best of our ability to keep the code clean, well managed, and basically not a disgusting pile of poorly named, stale, spaghetti kludge, but like all good school projects we had a deadline and other classes so somethings are not as nice as we'd like them to be.
 Please keep in mind this project is a prototype and our main goal was making something that demonstrated both the actions of the beatbox and that it was possible to pursue further.
 
-The final project is located under Final/MainAudio and is broken up into code two parts we refer to as the "*BeatCore*" and the "*Kinect Core*". The BeatCore manages the audio and is comprised of the **MainAudio.pde** and **timer.pde**. **PoseRule.pde**, **KinectCore.pde**, and **DrawSkeleton.pde** handle gesture input and recoginition from the kinect. **interface.pde** and **keyManagement.pde** handle the interface and keyboard input for inital testing. **auxFunctions.pde** partially handles waveform drawing.
+The final project is located under Final/MainAudio and is broken up into code two parts we refer to as the *"BeatCore"* and the *"Kinect Core"*. The BeatCore manages the audio and is comprised of the **MainAudio.pde** and **timer.pde**. **PoseRule.pde**, **KinectCore.pde**, and **DrawSkeleton.pde** handle gesture input and recoginition from the kinect. **interface.pde** and **keyManagement.pde** handle the interface and keyboard input for inital testing. **auxFunctions.pde** partially handles waveform drawing.
